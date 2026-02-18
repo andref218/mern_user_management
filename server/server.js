@@ -4,7 +4,7 @@ const app = require("./index");
 
 dotenv.config();
 
-// mongoDB connection
+// MongoDB connection
 mongoose
   .connect(
     process.env.MONGODB_URI.replace(
@@ -17,7 +17,7 @@ mongoose
     console.error("MongoDB connection failed:", error);
   });
 
-const port = process.env.PORT || 5001;
+const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
