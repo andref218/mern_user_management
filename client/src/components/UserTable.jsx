@@ -55,7 +55,7 @@ const UserTable = () => {
                   </button>{" "}
                   <button
                     className="flex items-center gap-1 px-3 py-1.5 text-sm bg-red-500
-                text-gray-900 rounded-lg hover:bg-red-400 transition-all font-semibold
+                text-white rounded-lg hover:bg-red-400 transition-all font-semibold
                 cursor-pointer"
                   >
                     <Trash size={16} />
