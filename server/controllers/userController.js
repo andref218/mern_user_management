@@ -81,7 +81,7 @@ exports.getAllUsers = async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ message: "Error Fetch statistics", error: error.message });
+      .json({ message: "Error getting all users", error: error.message });
   }
 };
 
@@ -95,7 +95,7 @@ exports.getUserById = async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ message: "Error Fetch statistics", error: error.message });
+      .json({ message: "Error getting user", error: error.message });
   }
 };
 
@@ -126,6 +126,52 @@ exports.createUser = async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ message: "Error Fetch statistics", error: error.message });
+      .json({ message: "Error creating user", error: error.message });
+  }
+};
+
+//Update User
+exports.updateUser = async (req, res) => {
+  try {
+    const { name, email, phone, status } = req.body;
+    if (email) {
+      const exists = await User.find({ email, _id: { $ne: req.params.id } });
+      if (exists.length > 0) {
+        return res.status(400).json({ message: "Email already exists" });
+      }
+    }
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        name,
+        email,
+        phone,
+        status,
+      },
+      { new: true, runValidators: true },
+    );
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json({ user, message: "User successfully updated" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error updating user", error: error.message });
+  }
+};
+
+//Delete user
+exports.deleteUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const user = await User.findByIdAndDelete(id);
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.json({ message: "User successfully deleted", success: true });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error deleting user", error: error.message });
   }
 };
