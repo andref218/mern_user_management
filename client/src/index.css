@@ -3,3 +3,60 @@
 body {
   @apply text-black;
 }
+
+.react-tel-input .flag-dropdown {
+  background-color: #1f2937 !important; /* bg-gray-800 */
+  border-color: #374151 !important; /* border-gray-700 */
+}
+
+.react-tel-input .flag-dropdown:hover {
+  background-color: #1f2937 !important;
+}
+
+.react-tel-input .form-control {
+  background-color: #1f2937 !important;
+  color: white !important;
+  border-color: #374151 !important;
+}
+
+.react-tel-input .form-control:focus {
+  background-color: #1f2937 !important;
+  border-color: #3b82f6 !important; /* focus:ring-blue-500 */
+  color: white !important;
+  outline: none !important;
+}
+
+.react-tel-input .country {
+  background-color: #1f2937 !important; /* bg-gray-800 */
+  color: white !important;
+}
+
+.react-tel-input .country:hover {
+  background-color: #374151 !important; /* bg-gray-700 in hover */
+  color: white !important;
+}
+
+.react-tel-input .flag {
+  background-color: #1f2937 !important; /* bg-gray-800 */
+  border-color: #374151 !important; /* border-gray-700 */
+}
+
+.react-tel-input .flag.open {
+  background-color: #1f2937 !important;
+}
+
+.react-tel-input .flag:hover {
+  background-color: #374151 !important;
+}
+
+.react-tel-input .selected-flag,
+.react-tel-input .selected-flag:hover {
+  background-color: #1f2937 !important;
+  border-color: #374151 !important;
+}
+
+.react-tel-input .selected-flag:focus,
+.react-tel-input .selected-flag:active {
+  background-color: #374151 !important;
+  border-color: #3b82f6 !important;
+}

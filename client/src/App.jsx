@@ -83,13 +83,11 @@ function App() {
     }
   };
 
-  const handleSubmit = async () => {
-    if (!formData.name || !formData.email || !formData.phone)
-      return alert("Fill all the fields");
+  const handleSubmit = async (values, { setSubmitting }) => {
     setLoading(true);
     try {
-      if (editingItem) await updateUser(editingItem._id, formData);
-      else await addUser(formData);
+      if (editingItem) await updateUser(editingItem._id, values);
+      else await addUser(values);
       closeModal();
       fetchUsers();
       if (editingItem?._id) {
@@ -97,9 +95,13 @@ function App() {
         setTimeout(() => setRecentlyEditedId(null), 800);
       }
     } catch (error) {
-      alert(error.message);
+      let msg = "An error occurred";
+      if (error.response?.data?.message) msg = error.response.data.message;
+      else if (error.message) msg = error.message;
+      alert(msg);
     }
     setLoading(false);
+    setSubmitting(false);
   };
 
   const handleDelete = async (id) => {
@@ -138,7 +140,7 @@ function App() {
               <Users size={28} className="text-gray-900" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white">User Management</h1>
+              <h1 className="text-3xl font-bold text-white">User Management</h1>
               <p className="text-gray-400 mt-1">Manage and monitor all users</p>
             </div>
           </div>

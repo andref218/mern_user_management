@@ -32,7 +32,7 @@ const StatsCard = ({
         </div>
         {/* Icon*/}
         <div
-          className={`p-3 rounded-lg flex items-center justify-center ${bgIcon}`}
+          className={`p-3 rounded-lg flex items-center justify-center w-12 h-12 ${bgIcon}`}
         >
           {React.cloneElement(icon, { size: 22, className: iconColor })}
         </div>
