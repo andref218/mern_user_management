@@ -1,7 +1,14 @@
 import React from "react";
 import { ChevronLeft, ChevronRight, Edit, Trash } from "lucide-react";
 
-const UserTable = () => {
+const UserTable = ({
+  users,
+  onEdit,
+  onDelete,
+  currentPage,
+  totalPages,
+  onPageChange,
+}) => {
   return (
     <div className="mt-4 bg-gray-900 rounded-lg overflow-hidden border border-gray-800">
       <div className="overflow-x-auto">
@@ -29,73 +36,121 @@ const UserTable = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-800">
-            <tr className="hover:bg-gray-800 transition-colors">
-              <td className="px-6 py-4 text-sm text-white font-medium">
-                User Name
-              </td>
-              <td className="px-6 py-4 text-sm text-white font-medium">
-                Email
-              </td>
-              <td className="px-6 py-4 text-sm text-white font-medium">
-                Phone
-              </td>
-              <td className="px-6 py-4 rounded-full text-xs font-semibold">
-                Active
-              </td>
-              <td className="px-6 py-4 text-sm text-gray-400">Date</td>
-              <td className="px-6 py-4 text-center">
-                <div className="flex justify-center gap-2">
-                  <button
-                    className="flex items-center gap-1 px-3 py-1.5 text-sm bg-green-500
-                text-gray-900 rounded-lg hover:bg-green-400 transition-all font-semibold
-                cursor-pointer"
-                  >
-                    <Edit size={16} />
-                    Edit
-                  </button>{" "}
-                  <button
-                    className="flex items-center gap-1 px-3 py-1.5 text-sm bg-red-500
-                text-white rounded-lg hover:bg-red-400 transition-all font-semibold
-                cursor-pointer"
-                  >
-                    <Trash size={16} />
-                    Delete
-                  </button>
-                </div>
-              </td>
-            </tr>
-            {/* Conditional rendering*/}
-            <tr>
-              <td colSpan={6} className="text-center py-12 text-gray-400">
-                No users found.
-              </td>
-            </tr>
+            {users.map((user, index) => {
+              return (
+                <tr className="hover:bg-gray-800 transition-colors">
+                  <td className="px-6 py-4 text-sm text-white font-medium">
+                    {user.name}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-white font-medium">
+                    {user.email}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-white font-medium">
+                    {user.phone}
+                  </td>
+                  <td className="px-6 py-4 text-sm">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        user.status === "Active"
+                          ? "bg-green-500 text-gray-900"
+                          : "bg-red-500 text-white"
+                      }`}
+                    >
+                      {user.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-400">
+                    {new Date(user.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    <div className="flex justify-center gap-2">
+                      <button
+                        className="flex items-center gap-1 px-3 py-1.5 text-sm bg-green-500
+                      text-gray-900 rounded-lg hover:bg-green-400 transition-all font-semibold
+                        cursor-pointer"
+                        onClick={() => onEdit(user)}
+                      >
+                        <Edit size={16} />
+                        Edit
+                      </button>{" "}
+                      <button
+                        className="flex items-center gap-1 px-3 py-1.5 text-sm bg-red-500
+                      text-white rounded-lg hover:bg-red-400 transition-all font-semibold
+                        cursor-pointer"
+                        onClick={() => onDelete(user._id)}
+                      >
+                        <Trash size={16} />
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+            {users.length === 0 && (
+              <tr>
+                <td colSpan={6} className="text-center py-12 text-gray-400">
+                  No users found.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
       {/*Pagination */}
-      {/*Condtional rendering */}
-      <div
-        className="px-6 py-4 border-t border-gray-800 flex justify-between items-center
+      {users.length > 0 && (
+        <div
+          className="px-6 py-4 border-t border-gray-800 flex justify-between items-center
       bg-gray-800"
-      >
-        <div className="text-sm text-gray-400">Page 1 of 5</div>
-        <div className="flex gap-2">
-          <button
-            className="flex items-center gap-1 px-3 py-2 bg-gray-700 border border-gray-600
-          text-gray-300 rounded-lg hover:bg-gray-600 disabled:opacity-50 text-sm"
-          >
-            <ChevronLeft size={15} /> Prev
-          </button>
-          <button className={`px-3 py-2 rounded-lg text-sm`}>1</button>
-          <button
-            className="flex items-center gap-1 px-3 py-2 bg-gray-700 border border-gray-600
-          text-gray-300 rounded-lg hover:bg-gray-600 disabled:opacity-50 text-sm"
-          >
-            Next <ChevronRight size={15} />
-          </button>
+        >
+          <div className="text-sm text-gray-400">
+            Page {currentPage} of {totalPages}
+          </div>
+          <div className="flex gap-2">
+            <button
+              className="flex items-center gap-1 px-3 py-2 bg-gray-700 border border-gray-600
+          text-gray-300 rounded-lg hover:bg-gray-600 disabled:opacity-50 text-sm cursor-pointer"
+              onClick={() => onPageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              <ChevronLeft size={15} /> Prev
+            </button>
+            {[...Array(totalPages)].map((_, i) => {
+              const p = i + 1;
+              if (
+                p === 1 ||
+                p === totalPages ||
+                (p >= currentPage - 1 && p <= currentPage + 1)
+              ) {
+                return (
+                  <button
+                    className={`px-3 py-2 rounded-lg text-sm text-white font-semibold cursor-pointer
+                      ${
+                        currentPage === p
+                          ? "bg-green-500 text-gray-900 font-semibold"
+                          : "bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600"
+                      }`}
+                    onClick={() => onPageChange(p)}
+                  >
+                    {p}
+                  </button>
+                );
+              } else if (p === currentPage + 2 || p === currentPage + 2) {
+                return <span className="px-2 py-2 text-gray-500-">....</span>;
+              }
+              return null;
+            })}
+            <button
+              className="flex items-center gap-1 px-3 py-2 bg-gray-700 border border-gray-600
+          text-gray-300 rounded-lg hover:bg-gray-600 disabled:opacity-50 text-sm cursor-pointer"
+              onClick={() => onPageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              Next <ChevronRight size={15} />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

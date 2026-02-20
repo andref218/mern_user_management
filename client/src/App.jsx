@@ -174,7 +174,14 @@ function App() {
           totalUsers={totalUsers}
         />
         {/* User Table */}
-        <UserTable />
+        <UserTable
+          users={users}
+          onEdit={openModal}
+          onDelete={handleDelete}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
         <UserModal isOpen={isModalOpen} onClose={closeModal} />
       </main>
     </div>
