@@ -44,7 +44,7 @@ const UserModal = ({
                 }
                 placeholder="John Smith"
                 className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 text-white
-                placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
+                placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               ></input>
             </div>
             <div>
@@ -59,7 +59,7 @@ const UserModal = ({
                 }
                 placeholder="john@example.com"
                 className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 text-white
-                placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
+                placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               ></input>
             </div>
             <div>
@@ -74,7 +74,7 @@ const UserModal = ({
                 }
                 placeholder="+1234567890"
                 className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 text-white
-                placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
+                placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               ></input>
             </div>
             <div>
@@ -83,7 +83,7 @@ const UserModal = ({
               </label>
               <select
                 className="w-full px-4 py-2.5 bg-gray-800 border-gray-700 text-white rounded-lg
-              focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+              focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                 value={formData.status}
                 onChange={(e) =>
                   setFormData({ ...formData, status: e.target.value })
@@ -105,7 +105,7 @@ const UserModal = ({
             </button>
             <button
               className="flex-1 flex items-center justify-center px-4 py-2.5 border border-gray-700 
-              bg-green-500 text-gray-900 rounded-lg hover:bg-green-400 transition-all cursor-pointer"
+              bg-blue-500 text-gray-900 rounded-lg hover:bg-blue-400 transition-all cursor-pointer"
               onClick={onSubmit}
               disabled={loading}
             >

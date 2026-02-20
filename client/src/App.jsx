@@ -128,20 +128,23 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-950">
-      <div className="bg-gray-900 shadow-xl border-b border-gray-800 ">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-green-500 rounded-lg">
+      <div className="bg-gray-900 shadow-xl border-b border-gray-800">
+        <div
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row 
+          justify-between items-center gap-4"
+        >
+          <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto text-center sm:text-left">
+            <div className="p-2 bg-blue-500/90 rounded-lg">
               <Users size={28} className="text-gray-900" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-white">User Management</h1>
-              <p className="text-gray-400 mt-1">Mern Stack Application</p>
+              <h1 className="text-2xl font-bold text-white">User Management</h1>
+              <p className="text-gray-400 mt-1">Manage and monitor all users</p>
             </div>
           </div>
           <button
-            className="flex items-center gap-2 bg-green-500 text-gray-900 px-5 py-2.5 rounded-lg
-          hover:bg-green-400 transition-colors shadow-lg font-semibold"
+            className="flex items-center justify-center gap-2 bg-blue-500/90 text-gray-900 px-5 py-2.5 rounded-lg
+      hover:bg-blue-500 transition-colors shadow-lg font-semibold  sm:w-auto"
             onClick={() => openModal()}
           >
             <Plus size={20} />

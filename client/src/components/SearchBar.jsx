@@ -20,8 +20,8 @@ const SearchBar = ({
       {/*Search Input*/}
       <div
         className="flex items-center gap-2 w-full bg-gray-800 rounded-lg
-        border border-gray-700 focus-within:ring-2 focus-within:ring-green-500
-      focus-within:border-green-500"
+        border border-gray-700 focus-within:ring-2 focus-within:ring-blue-500/90
+      focus-within:border-blue-500/90"
       >
         <Search size={20} className="text-gray-400 pointer-events-none ml-3" />
 
@@ -42,8 +42,8 @@ const SearchBar = ({
           <label className="text-sm text-gray-400">Rows</label>
           <select
             className="px-3 py-1.5 bg-gray-800 border border-gray-700
-          text-white rounded-lg focus:ring-2 focus:ring-green-500 
-          focus:border-green-500 outline-none text-sm"
+          text-white rounded-lg focus:ring-2 focus:ring-blue-500 
+          focus:border-blue-500 outline-none text-sm"
             onChange={(e) => onItemsPerPageChange(Number(e.target.value))}
           >
             <option value={5}>5</option>
