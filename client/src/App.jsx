@@ -23,8 +23,9 @@ function App() {
     name: "",
     email: "",
     phone: "",
-    status: "active",
+    status: "Active",
   });
+  const [recentlyEditedId, setRecentlyEditedId] = useState(false);
 
   const [editingItem, setEditingItem] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -67,7 +68,7 @@ function App() {
   };
 
   const handleSubmit = async () => {
-    if (!formData.name || !formData.email || formData.phone)
+    if (!formData.name || !formData.email || !formData.phone)
       return alert("Fill all the fields");
     setLoading(true);
     try {
@@ -75,6 +76,12 @@ function App() {
       else await addUser(formData);
       closeModal();
       fetchUsers();
+      if (editingItem?._id) {
+        setRecentlyEditedId(editingItem._id);
+        setTimeout(() => setRecentlyEditedId(null), 800);
+      }
+
+      setTimeout(() => setRecentlyEditedId(null), 800);
     } catch (error) {
       alert(error.message);
     }
@@ -181,8 +188,17 @@ function App() {
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={setCurrentPage}
+          recentlyEditedId={recentlyEditedId}
         />
-        <UserModal isOpen={isModalOpen} onClose={closeModal} />
+        <UserModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          formData={formData}
+          setFormData={setFormData}
+          onSubmit={handleSubmit}
+          loading={loading}
+          status={status}
+        />
       </main>
     </div>
   );

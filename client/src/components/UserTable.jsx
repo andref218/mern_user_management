@@ -1,5 +1,6 @@
 import React from "react";
 import { ChevronLeft, ChevronRight, Edit, Trash } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const UserTable = ({
   users,
@@ -8,6 +9,7 @@ const UserTable = ({
   currentPage,
   totalPages,
   onPageChange,
+  recentlyEditedId,
 }) => {
   return (
     <div className="mt-4 bg-gray-900 rounded-lg overflow-hidden border border-gray-800">
@@ -36,9 +38,23 @@ const UserTable = ({
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-800">
-            {users.map((user, index) => {
+            {users.map((user) => {
               return (
-                <tr className="hover:bg-gray-800 transition-colors">
+                <motion.tr
+                  key={user._id}
+                  initial={{ opacity: 0, y: -10 }} // starting state
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                    backgroundColor:
+                      recentlyEditedId === user._id
+                        ? "rgba(16, 185, 129, 0.2)"
+                        : "transparent",
+                  }}
+                  exit={{ opacity: 0, y: -10 }} // state when removed
+                  transition={{ duration: 0.15 }}
+                  className="hover:bg-gray-800 transition-colors"
+                >
                   <td className="px-6 py-4 text-sm text-white font-medium">
                     {user.name}
                   </td>
@@ -84,7 +100,7 @@ const UserTable = ({
                       </button>
                     </div>
                   </td>
-                </tr>
+                </motion.tr>
               );
             })}
             {users.length === 0 && (
@@ -135,7 +151,7 @@ const UserTable = ({
                     {p}
                   </button>
                 );
-              } else if (p === currentPage + 2 || p === currentPage + 2) {
+              } else if (p === currentPage - 2 || p === currentPage + 2) {
                 return <span className="px-2 py-2 text-gray-500-">....</span>;
               }
               return null;

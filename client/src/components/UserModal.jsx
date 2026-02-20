@@ -1,6 +1,14 @@
 import { Check, X } from "lucide-react";
 
-const UserModal = ({ isOpen, onClose }) => {
+const UserModal = ({
+  isOpen,
+  onClose,
+  formData,
+  setFormData,
+  onSubmit,
+  loading,
+  status,
+}) => {
   if (!isOpen) return null;
   return (
     <div
@@ -12,7 +20,9 @@ const UserModal = ({ isOpen, onClose }) => {
       overflow-y-auto border border-gray-800 rounded-lg"
       >
         <div className="flex justify-between items-center p-6 border-b border-gray-800">
-          <h2 className="text-2xl font-bold text-white">Add new user</h2>
+          <h2 className="text-2xl font-bold text-white">
+            {formData._id ? "Edit user" : "Add new user"}
+          </h2>
           <button
             className="text-gray-400 hover:text-white transition-all cursor-pointer"
             onClick={onClose}
@@ -28,6 +38,10 @@ const UserModal = ({ isOpen, onClose }) => {
               </label>
               <input
                 type="text"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 placeholder="John Smith"
                 className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 text-white
                 placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
@@ -39,6 +53,10 @@ const UserModal = ({ isOpen, onClose }) => {
               </label>
               <input
                 type="email"
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
                 placeholder="john@example.com"
                 className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 text-white
                 placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
@@ -50,6 +68,10 @@ const UserModal = ({ isOpen, onClose }) => {
               </label>
               <input
                 type="tel"
+                value={formData.phone}
+                onChange={(e) =>
+                  setFormData({ ...formData, phone: e.target.value })
+                }
                 placeholder="+1234567890"
                 className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 text-white
                 placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
@@ -62,8 +84,14 @@ const UserModal = ({ isOpen, onClose }) => {
               <select
                 className="w-full px-4 py-2.5 bg-gray-800 border-gray-700 text-white rounded-lg
               focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+                value={formData.status}
+                onChange={(e) =>
+                  setFormData({ ...formData, status: e.target.value })
+                }
               >
-                <option>Active</option>
+                {status.map((status) => (
+                  <option value={status}>{status}</option>
+                ))}
               </select>
             </div>
           </div>
@@ -71,15 +99,22 @@ const UserModal = ({ isOpen, onClose }) => {
             <button
               className="flex-1 px-4 py-2.5 bg-gray-800 border border-gray-700 text-gray-300
             rounded-lg hover:bg-gray-700 transition-all cursor-pointer"
+              onClick={onClose}
             >
               Cancel
             </button>
             <button
               className="flex-1 flex items-center justify-center px-4 py-2.5 border border-gray-700 
               bg-green-500 text-gray-900 rounded-lg hover:bg-green-400 transition-all cursor-pointer"
+              onClick={onSubmit}
+              disabled={loading}
             >
               <Check size={20} />
-              Add User
+              {loading
+                ? "Saving..."
+                : formData._id
+                  ? "Update user"
+                  : "Add user"}
             </button>
           </div>
         </div>
