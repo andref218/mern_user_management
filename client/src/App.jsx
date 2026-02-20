@@ -16,7 +16,8 @@ import UserModal from "./components/UserModal";
 function App() {
   const [users, setUsers] = useState([]);
   const [totalUsers, setTotalUsers] = useState(0);
-  const [stats, setStats] = useState({ total: 0, active: 0, inactive: 0 });
+  const [stats, setStats] = useState({});
+
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -29,6 +30,8 @@ function App() {
 
   const [editingItem, setEditingItem] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingStats, setLoadingStats] = useState(true);
+  const [loadingUsers, setLoadingUsers] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
@@ -46,25 +49,38 @@ function App() {
 
   //Fetch stats
   const fetchStats = async () => {
-    const data = await getStats();
-    setStats(data);
+    try {
+      const data = await getStats();
+      setStats(data);
+    } finally {
+      setLoadingStats(false);
+    }
   };
 
   //Fetch users
   const fetchUsers = async () => {
-    const data = await getUsers(currentPage, itemsPerPage);
-    setUsers(data.users);
-    setTotalPages(data.totalPages);
-    setTotalUsers(data.totalUsers);
-    fetchStats();
+    try {
+      const data = await getUsers(currentPage, itemsPerPage);
+      setUsers(data.users);
+      setTotalPages(data.totalPages);
+      setTotalUsers(data.totalUsers);
+      await fetchStats();
+    } finally {
+      setLoadingUsers(false);
+    }
   };
 
   //Handle search
   const handleSearch = async () => {
-    const data = await searchUsers(searchTerm, currentPage, itemsPerPage);
-    setUsers(data.users);
-    setTotalPages(data.totalPages);
-    setTotalUsers(data.totalUsers);
+    setLoadingUsers(true);
+    try {
+      const data = await searchUsers(searchTerm, currentPage, itemsPerPage);
+      setUsers(data.users);
+      setTotalPages(data.totalPages);
+      setTotalUsers(data.totalUsers);
+    } finally {
+      setLoadingUsers(false);
+    }
   };
 
   const handleSubmit = async () => {
@@ -80,8 +96,6 @@ function App() {
         setRecentlyEditedId(editingItem._id);
         setTimeout(() => setRecentlyEditedId(null), 800);
       }
-
-      setTimeout(() => setRecentlyEditedId(null), 800);
     } catch (error) {
       alert(error.message);
     }
@@ -141,6 +155,7 @@ function App() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <StatsCard
             title="Total Users"
+            loading={loadingStats}
             value={{ number: stats.total }}
             icon={<Users />}
             bgIcon="bg-indigo-500"
@@ -149,6 +164,7 @@ function App() {
           />
           <StatsCard
             title="Active Users"
+            loading={loadingStats}
             value={{ number: stats.active }}
             icon={<Check />}
             bgIcon="bg-green-500"
@@ -157,6 +173,7 @@ function App() {
           />
           <StatsCard
             title="Inactive Users"
+            loading={loadingStats}
             value={{ number: stats.inactive }}
             icon={<X />}
             bgIcon="bg-red-500"
@@ -183,6 +200,7 @@ function App() {
         {/* User Table */}
         <UserTable
           users={users}
+          loading={loadingUsers}
           onEdit={openModal}
           onDelete={handleDelete}
           currentPage={currentPage}

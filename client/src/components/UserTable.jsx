@@ -1,9 +1,11 @@
 import React from "react";
 import { ChevronLeft, ChevronRight, Edit, Trash } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import LoadingSpinner from "./LoadingSpinner";
 
 const UserTable = ({
   users,
+  loading,
   onEdit,
   onDelete,
   currentPage,
@@ -38,8 +40,20 @@ const UserTable = ({
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-800">
-            {users.map((user) => {
-              return (
+            {loading ? (
+              <tr>
+                <td colSpan={6} className="py-12 text-center">
+                  <LoadingSpinner text="Loading users..." />
+                </td>
+              </tr>
+            ) : users.length === 0 ? (
+              <tr>
+                <td colSpan={6} className="py-12 text-center text-gray-400">
+                  No users found.
+                </td>
+              </tr>
+            ) : (
+              users.map((user) => (
                 <motion.tr
                   key={user._id}
                   initial={{ opacity: 0, y: -10 }} // starting state
@@ -101,14 +115,7 @@ const UserTable = ({
                     </div>
                   </td>
                 </motion.tr>
-              );
-            })}
-            {users.length === 0 && (
-              <tr>
-                <td colSpan={6} className="text-center py-12 text-gray-400">
-                  No users found.
-                </td>
-              </tr>
+              ))
             )}
           </tbody>
         </table>
