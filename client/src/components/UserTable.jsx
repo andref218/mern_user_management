@@ -2,6 +2,7 @@ import React from "react";
 import { ChevronLeft, ChevronRight, Edit, Trash } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import LoadingSpinner from "./LoadingSpinner";
+import { useState } from "react";
 
 const UserTable = ({
   users,
@@ -12,6 +13,7 @@ const UserTable = ({
   totalPages,
   onPageChange,
   recentlyEditedId,
+  isAdmin,
 }) => {
   return (
     <div className="mt-4 bg-gray-900 rounded-lg overflow-hidden border border-gray-800">
@@ -97,8 +99,12 @@ const UserTable = ({
                       <button
                         className="flex items-center gap-1 px-3 py-1.5 text-sm bg-green-500
                       text-gray-900 rounded-lg hover:bg-green-400 transition-all font-semibold
-                        cursor-pointer"
+                        cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                         onClick={() => onEdit(user)}
+                        disabled={!isAdmin}
+                        title={
+                          !isAdmin ? "Demo mode: cannot edit" : "Edit user"
+                        }
                       >
                         <Edit size={16} />
                         Edit
@@ -106,8 +112,12 @@ const UserTable = ({
                       <button
                         className="flex items-center gap-1 px-3 py-1.5 text-sm bg-red-500
                       text-white rounded-lg hover:bg-red-400 transition-all font-semibold
-                        cursor-pointer"
+                        cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                         onClick={() => onDelete(user._id)}
+                        disabled={!isAdmin}
+                        title={
+                          !isAdmin ? "Demo mode: cannot delete" : "Delete user"
+                        }
                       >
                         <Trash size={16} />
                         Delete

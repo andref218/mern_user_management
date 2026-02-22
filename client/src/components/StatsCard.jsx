@@ -4,6 +4,7 @@ import LoadingSpinner from "./LoadingSpinner";
 
 const StatsCard = ({
   loading,
+  error,
   title,
   value,
   icon,
@@ -24,7 +25,13 @@ const StatsCard = ({
             className="text-3xl font-bold mt-2"
             style={{ color: value.color || "white" }}
           >
-            {loading ? <LoadingSpinner inline size={24} /> : value.number}
+            {loading ? (
+              <LoadingSpinner inline size={24} />
+            ) : error ? (
+              <span className="text-sm text-gray-400">No stats found.</span>
+            ) : (
+              (value?.number ?? "-")
+            )}
           </p>
           {description && (
             <p className="text-gray-400 text-sm mt-1">{description}</p>

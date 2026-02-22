@@ -14,6 +14,11 @@ import { useEffect, useState } from "react";
 import UserModal from "./components/UserModal";
 
 function App() {
+  const ADMIN_TOKEN = import.meta.env.VITE_ADMIN_TOKEN;
+  const [userToken, setUserToken] = useState("");
+  const isAdmin = userToken === ADMIN_TOKEN;
+  const [tokenValidMessage, setTokenValidMessage] = useState(false);
+
   const [users, setUsers] = useState([]);
   const [totalUsers, setTotalUsers] = useState(0);
   const [stats, setStats] = useState({});
@@ -29,9 +34,12 @@ function App() {
   const [recentlyEditedId, setRecentlyEditedId] = useState(false);
 
   const [editingItem, setEditingItem] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [loadingStats, setLoadingStats] = useState(true);
   const [loadingUsers, setLoadingUsers] = useState(true);
+  const [statsError, setStatsError] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
@@ -43,15 +51,43 @@ function App() {
   }, [currentPage, itemsPerPage]);
 
   useEffect(() => {
+    fetchStats();
+  }, []);
+
+  useEffect(() => {
     if (searchTerm) handleSearch();
     else fetchUsers();
   }, [searchTerm]);
 
+  useEffect(() => {
+    if (isAdmin) {
+      setTokenValidMessage(true);
+      const timer = setTimeout(() => setTokenValidMessage(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [isAdmin]);
+
+  //Handle Token Submit
+  const handleTokenSubmit = () => {
+    if (userToken === ADMIN_TOKEN) {
+      alert("Admin mode activated.");
+    } else {
+      setTokenValidMessage(false);
+      alert("Invalid token.");
+    }
+  };
+
   //Fetch stats
   const fetchStats = async () => {
+    setLoadingStats(true);
     try {
+      setStatsError(false);
       const data = await getStats();
       setStats(data);
+    } catch (error) {
+      console.error("Failed to fetch stats", error);
+      setStatsError(true);
+      setStats(null);
     } finally {
       setLoadingStats(false);
     }
@@ -59,12 +95,17 @@ function App() {
 
   //Fetch users
   const fetchUsers = async () => {
+    setLoadingUsers(true);
     try {
       const data = await getUsers(currentPage, itemsPerPage);
       setUsers(data.users);
       setTotalPages(data.totalPages);
       setTotalUsers(data.totalUsers);
-      await fetchStats();
+    } catch (error) {
+      console.error("Failed to fetch users", error);
+      setUsers([]);
+      setTotalPages(0);
+      setTotalUsers(0);
     } finally {
       setLoadingUsers(false);
     }
@@ -86,8 +127,11 @@ function App() {
   const handleSubmit = async (values, { setSubmitting }) => {
     setLoading(true);
     try {
-      if (editingItem) await updateUser(editingItem._id, values);
-      else await addUser(values);
+      if (editingItem)
+        await updateUser(editingItem._id, values, {
+          headers: { "x-admin-token": userToken },
+        });
+      else await addUser(values, { headers: { "x-admin-token": userToken } });
       closeModal();
       fetchUsers();
       if (editingItem?._id) {
@@ -106,7 +150,7 @@ function App() {
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure?")) {
-      await deleteUser(id);
+      await deleteUser(id, { headers: { "x-admin-token": userToken } });
       fetchUsers();
     }
   };
@@ -130,6 +174,34 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-950">
+      {/* Token Input */}
+      {!isAdmin && (
+        <div className="p-4 bg-gray-900 flex gap-2 items-center border-b border-gray-800 ">
+          <input
+            type="password"
+            placeholder="Enter admin token"
+            value={userToken}
+            onChange={(e) => {
+              setUserToken(e.target.value);
+            }}
+            className="px-4 py-2 rounded-lg bg-gray-800 text-white  
+            border border-gray-700 focus-within:ring-2 focus-within:ring-blue-500/90
+          focus-within:border-blue-500/90"
+          />
+          <button
+            onClick={handleTokenSubmit}
+            className="px-4 py-2 rounded-lg bg-blue-500 text-gray-900 font-semibold hover:bg-blue-400
+            cursor-pointer"
+          >
+            Unlock Admin
+          </button>
+        </div>
+      )}
+      {tokenValidMessage && (
+        <div className="w-full bg-gray-900 border-b border-gray-800 flex justify-center py-4">
+          <span className="text-green-500">Admin token valid.</span>
+        </div>
+      )}
       <div className="bg-gray-900 shadow-xl border-b border-gray-800">
         <div
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row 
@@ -146,8 +218,11 @@ function App() {
           </div>
           <button
             className="flex items-center justify-center gap-2 bg-blue-500/90 text-gray-900 px-5 py-2.5 rounded-lg
-      hover:bg-blue-500 transition-colors shadow-lg font-semibold  sm:w-auto"
+          hover:bg-blue-500 transition-colors shadow-lg font-semibold  sm:w-auto cursor-pointer disabled:opacity-50 
+          disabled:cursor-not-allowed"
             onClick={() => openModal()}
+            disabled={!isAdmin}
+            title={!isAdmin ? "Demo mode: write actions disabled" : "Add user"}
           >
             <Plus size={20} />
             <span className="text-sm">Add user</span>
@@ -161,7 +236,8 @@ function App() {
           <StatsCard
             title="Total Users"
             loading={loadingStats}
-            value={{ number: stats.total }}
+            error={statsError}
+            value={{ number: stats?.total }}
             icon={<Users />}
             bgIcon="bg-indigo-500"
             iconColor="text-white"
@@ -170,7 +246,8 @@ function App() {
           <StatsCard
             title="Active Users"
             loading={loadingStats}
-            value={{ number: stats.active }}
+            error={statsError}
+            value={{ number: stats?.active }}
             icon={<Check />}
             bgIcon="bg-green-500"
             iconColor="text-white"
@@ -179,7 +256,8 @@ function App() {
           <StatsCard
             title="Inactive Users"
             loading={loadingStats}
-            value={{ number: stats.inactive }}
+            error={statsError}
+            value={{ number: stats?.inactive }}
             icon={<X />}
             bgIcon="bg-red-500"
             iconColor="text-white"
@@ -212,6 +290,7 @@ function App() {
           totalPages={totalPages}
           onPageChange={setCurrentPage}
           recentlyEditedId={recentlyEditedId}
+          isAdmin={isAdmin}
         />
         <UserModal
           isOpen={isModalOpen}
@@ -221,6 +300,7 @@ function App() {
           onSubmit={handleSubmit}
           loading={loading}
           status={status}
+          isAdmin={isAdmin}
         />
       </main>
     </div>

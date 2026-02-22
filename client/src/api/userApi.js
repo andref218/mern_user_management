@@ -24,10 +24,10 @@ export const getStats = async () => {
 };
 
 //Add a new user
-export const addUser = async (data) => {
+export const addUser = async (data, config = {}) => {
   const res = await fetch(API_URL, {
     method: "POST",
-    headers: { "content-type": "application/json" },
+    headers: { "content-type": "application/json", ...config.headers },
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error("Failed to add user");
@@ -35,10 +35,10 @@ export const addUser = async (data) => {
 };
 
 //Update existing user
-export const updateUser = async (id, data) => {
+export const updateUser = async (id, data, config = {}) => {
   const res = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
-    headers: { "content-type": "application/json" },
+    headers: { "content-type": "application/json", ...config.headers },
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error("Failed update user");
@@ -46,9 +46,10 @@ export const updateUser = async (id, data) => {
 };
 
 //Delete user
-export const deleteUser = async (id) => {
+export const deleteUser = async (id, config = {}) => {
   const res = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
+    headers: { ...config.headers },
   });
   if (!res.ok) throw new Error("Failed to delete user");
   return res.json();
