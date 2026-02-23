@@ -16,9 +16,9 @@ export const searchUsers = async (term = "", page = 1, limit = 5) => {
   return res.json();
 };
 
-//Get User status
+//Get User stats
 export const getStats = async () => {
-  const res = await fetch(`${API_URL}/status`);
+  const res = await fetch(`${API_URL}/stats`);
   if (!res.ok) throw new Error("Failed to get stats");
   return res.json();
 };

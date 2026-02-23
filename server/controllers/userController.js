@@ -1,7 +1,7 @@
 const User = require("../models/userModel");
 
-//Get status
-exports.getStatus = async (req, res) => {
+//Get stats
+exports.getStats = async (req, res) => {
   try {
     const total = await User.countDocuments();
     const active = await User.countDocuments({ status: "Active" });

@@ -127,17 +127,26 @@ function App() {
   const handleSubmit = async (values, { setSubmitting }) => {
     setLoading(true);
     try {
-      if (editingItem)
+      if (editingItem) {
         await updateUser(editingItem._id, values, {
           headers: { "x-admin-token": userToken },
         });
-      else await addUser(values, { headers: { "x-admin-token": userToken } });
-      closeModal();
-      fetchUsers();
-      if (editingItem?._id) {
+
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user._id === editingItem._id ? { ...user, ...values } : user,
+          ),
+        );
+
         setRecentlyEditedId(editingItem._id);
         setTimeout(() => setRecentlyEditedId(null), 800);
+      } else {
+        await addUser(values, { headers: { "x-admin-token": userToken } });
+        fetchUsers();
+        fetchStats();
       }
+
+      closeModal();
     } catch (error) {
       let msg = "An error occurred";
       if (error.response?.data?.message) msg = error.response.data.message;
@@ -150,8 +159,14 @@ function App() {
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure?")) {
-      await deleteUser(id, { headers: { "x-admin-token": userToken } });
-      fetchUsers();
+      try {
+        await deleteUser(id, { headers: { "x-admin-token": userToken } });
+        fetchUsers();
+        fetchStats();
+      } catch (error) {
+        console.error("Failed to delete user", error);
+        alert("Failed to delete user");
+      }
     }
   };
 

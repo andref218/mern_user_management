@@ -157,6 +157,7 @@ const UserTable = ({
               ) {
                 return (
                   <button
+                    key={`page-${p}`}
                     className={`px-3 py-2 rounded-lg text-sm text-white font-semibold cursor-pointer
                       ${
                         currentPage === p
@@ -169,7 +170,14 @@ const UserTable = ({
                   </button>
                 );
               } else if (p === currentPage - 2 || p === currentPage + 2) {
-                return <span className="px-2 py-2 text-gray-500-">....</span>;
+                return (
+                  <span
+                    key={`ellipsis-${p}`}
+                    className="px-2 py-2 text-gray-500-"
+                  >
+                    ....
+                  </span>
+                );
               }
               return null;
             })}

@@ -1,7 +1,7 @@
 const express = require("express");
 const { model } = require("mongoose");
 const {
-  getStatus,
+  getStats,
   searchUsers,
   getUserById,
   getAllUsers,
@@ -12,7 +12,7 @@ const {
 
 const router = express.Router();
 
-router.get("/status", getStatus);
+router.get("/stats", getStats);
 router.get("/search/:query", searchUsers);
 router.get("/", getAllUsers);
 router.get("/:id", getUserById);
