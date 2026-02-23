@@ -3,6 +3,13 @@
 This project is a **CRUD User Manager** built with the **MERN stack** (MongoDB, Express, React, Node.js).  
 It allows you to manage users (create, read, update, delete) securely and efficiently with a modern, responsive interface.
 
+## 🌐 Live Demo
+
+Check out the live demo:  
+[![Visit Live App](https://img.shields.io/badge/Live%20App-Visit%20Now-brightgreen)](https://mern-user-management-eta.vercel.app/)
+
+[![Home Screen](./screenshots/mernUserManagementApp1.png)](https://mern-user-management-eta.vercel.app/)
+
 ---
 
 The app includes:
