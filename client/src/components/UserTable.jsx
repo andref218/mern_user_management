@@ -78,7 +78,7 @@ const UserTable = ({
                     {user.email}
                   </td>
                   <td className="px-6 py-4 text-sm text-white font-medium">
-                    {user.phone}
+                    +{user.phone}
                   </td>
                   <td className="px-6 py-4 text-sm">
                     <span
