@@ -1,3 +1,114 @@
-# User Management CRUD Application
+# User Management App
 
-User management application built with the MERN stack, focused on user CRUD operations and administration.
+This project is a **CRUD User Manager** built with the **MERN stack** (MongoDB, Express, React, Node.js).  
+It allows you to manage users (create, read, update, delete) securely and efficiently with a modern, responsive interface.
+
+---
+
+The app includes:
+
+- User management with active/inactive status
+- Quick statistics (total, active, inactive)
+- Dynamic search
+- Modals for creating/editing users
+- Admin-protected actions via **admin token**
+
+---
+
+## 🎯 Project Goals
+
+- Implement a full CRUD application for user management
+- Demonstrate frontend-backend integration via a REST API
+- Implement **admin authentication via token** to protect sensitive actions
+- Build a clean and responsive UI with Tailwind CSS
+- Apply basic security best practices in both frontend and backend
+
+---
+
+## 🛠️ Technologies & Libraries
+
+### Frontend
+
+- **React** – Main UI framework
+- **Vite** – Fast development and build tool
+- **Tailwind CSS** – Utility-first responsive styling
+- **Framer Motion** – Animations and transitions
+- **Lucide React** – SVG icon library
+- **Formik + Yup** – Form handling and validation
+- **react-phone-input-2** – International phone input
+
+### Backend
+
+- **Node.js** – JavaScript runtime
+- **Express** – REST API framework
+- **MongoDB** – NoSQL database
+- **Mongoose** – MongoDB object modeling
+- **CORS** – Cross-origin resource sharing
+- **Express Rate Limit** – Basic API rate limiting
+- **dotenv** – Environment variable management
+- **Nodemon** – Development auto-reload
+
+---
+
+## 💡 Features
+
+- List users with pagination
+- Dynamic user search
+- Create, edit, and delete users (protected with admin token)
+- Interactive modals for adding/updating users
+- Quick statistics: total, active, inactive users
+- Mobile-friendly UI
+
+---
+
+## 🔑 Admin Token
+
+To enable write actions (create, update, delete), an **admin token** must be provided in `.env`.  
+This token protects the app in demo mode and ensures only authorized users can perform sensitive actions.
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/andref218/mern_user_management.git
+cd mern_user_management
+```
+
+## 📂 Project Structure
+
+```text
+mern_user_management/
+├── README.md                       # Project documentation
+├── client/                         # Frontend (React + Vite)
+│   ├── README.md
+│   ├── eslint.config.js            # ESLint configuration
+│   ├── index.html                  # Main HTML template
+│   ├── package.json
+│   ├── vite.config.js              # Vite configuration
+│   ├── public/                     # Static assets
+│   │   └── vite.svg
+│   └── src/
+│       ├── App.jsx                 # Main React component
+│       ├── main.jsx                # React entry point
+│       ├── index.css               # Global styles
+│       ├── api/                    # API calls (fetch / axios wrapper)
+│       ├── assets/                 # Images, icons, fonts
+│       └── components/             # Reusable React components
+│           ├── StatsCard.jsx
+│           ├── SearchBar.jsx
+│           ├── UserTable.jsx
+│           └── UserModal.jsx
+├── server/                         # Backend (Node.js + Express)
+│   ├── README.md
+│   ├── server.js                   # Entry point for the Express server
+│   ├── package.json
+│   ├── controllers/                # Request handlers
+│   │   └── userController.js
+│   ├── models/                     # Mongoose models
+│   │   └── userModel.js
+│   └── routes/                     # Express routes
+│       └── userRoutes.js
+```
