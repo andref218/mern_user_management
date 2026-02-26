@@ -10,6 +10,8 @@ Check out the live demo:
 
 [![Home Screen](./screenshots/mernUserManagementApp1.png)](https://mern-user-management-eta.vercel.app/)
 
+> ⚠️ **Note:** On free hosting plans, the backend may take **30–60 seconds to respond** on the first visit due to cold start. Subsequent requests will be faster.
+
 ---
 
 The app includes:
@@ -23,6 +25,8 @@ The app includes:
 ---
 
 ## 🎯 Project Goals
+
+The main goals of this project are to:
 
 - Implement a full CRUD application for user management
 - Demonstrate frontend-backend integration via a REST API
@@ -82,6 +86,59 @@ This token protects the app in demo mode and ensures only authorized users can p
 ```bash
 git clone https://github.com/andref218/mern_user_management.git
 cd mern_user_management
+```
+
+2. Install dependencies for both server and client:
+
+# Server
+
+```bash
+cd server
+npm install
+```
+
+# Client
+
+```bash
+cd ../client
+npm install
+```
+
+3. Setup environment variables:
+   Create a `.env` file in ther server folder:
+
+```env
+PORT=3000
+MONGODB_URI=your_mongodb_connection_string_here
+DATABASE_PASSWORD= your_database_password
+ADMIN_TOKEN=your_admin_token
+DEMO_MODE=true
+
+```
+
+4. Setup environment variables:
+   Create a `.env` file in ther client folder:
+
+```env
+VITE_API_URL=http://localhost:3000/api/v1
+VITE_ADMIN_TOKEN=your_vite_admin_token
+```
+
+5. Run the development servers:
+   **Keep both terminals open while the servers are running.**
+
+# Server
+
+```bash
+cd server
+npm start
+```
+
+# Client
+
+```bash
+cd ../client
+npm run dev
 ```
 
 ## 📂 Project Structure
